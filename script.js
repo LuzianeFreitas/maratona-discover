@@ -29,9 +29,11 @@ const transactions = [
 ]
 
 const Transaction = {
+    // Atalho de todas as transações
+    all: transactions,
     incomes() {
         let income = 0
-        transactions.forEach((transaction) => {
+        Transaction.all.forEach((transaction) => {
             if(transaction.amount > 0) {
                 income += transaction.amount
             }
@@ -40,7 +42,7 @@ const Transaction = {
     },
     expenses() {
         let expense = 0
-        transactions.forEach((transaction) => {
+        Transaction.all.forEach((transaction) => {
             if(transaction.amount < 0) {
                 expense += transaction.amount
             }
@@ -48,7 +50,7 @@ const Transaction = {
         return expense
     },
     total() {
-        return transactions.incomes() + transactions.expenses()
+        return Transaction.incomes() + Transaction.expenses()
     }
 }
 
