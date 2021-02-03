@@ -31,6 +31,11 @@ const transactions = [
 const Transaction = {
     // Atalho de todas as transações
     all: transactions,
+    add(transaction) {
+        Transaction.all.push(transaction)
+
+        App.reload()
+    },
     incomes() {
         let income = 0
         Transaction.all.forEach((transaction) => {
@@ -84,6 +89,9 @@ const DOM = {
         document.getElementById('incomeDisplay').innerHTML = Utils.formatCurrency(Transaction.incomes())
         document.getElementById('expenseDisplay').innerHTML = Utils.formatCurrency(Transaction.expenses())
         document.getElementById('totalDisplay').innerHTML = Utils.formatCurrency(Transaction.total())
+    },
+    clearTransactions() {
+        DOM.transactionsContainer.innerHTML = ""
     }
 }
 
@@ -104,8 +112,27 @@ const Utils = {
     }
 }
 
-transactions.forEach(function(transaction) {
-    DOM.addTransaction(transaction)
+const App = {
+    init() {
+
+        Transaction.all.forEach((transaction) => {
+            DOM.addTransaction(transaction)
+        })
+        
+        DOM.updateBalance()
+    },
+    reload() {
+        DOM.clearTransactions()
+        App.init()
+    }
+}
+
+App.init()
+
+Transaction.add({
+    id: 4,
+    description: 'Mercado',
+    amount: -10000,
+    date: '03/01/2021',
 })
 
-DOM.updateBalance()
