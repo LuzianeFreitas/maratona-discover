@@ -274,7 +274,7 @@ td.expense {
     margin-top: 0.8rem;
 }
 
-.input-group small {
+.input-group .help {
     opacity: 0.4;
 }
 
