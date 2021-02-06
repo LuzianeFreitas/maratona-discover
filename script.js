@@ -205,7 +205,7 @@ const Form = {
             Modal.close()
 
             // Atualizando a aplicação
-            App.reload()
+            // App.reload()
         } catch (error) {
             // Modificar depois para modal
             alert(error.message)
