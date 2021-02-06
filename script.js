@@ -7,7 +7,17 @@ const Modal = {
     }
 }
 
-const transactions = [
+const Storage = {
+    get() {
+        return JSON.parse(localStorage.getItem("transactions")) || []
+    },
+
+    set(transactions) {
+        localStorage.setItem("transactions", JSON.stringify(transactions))
+    }
+}
+
+/* const transactions = [
     {
         description: 'Luz',
         amount: -50000,
@@ -24,10 +34,11 @@ const transactions = [
         date: '02/01/2021',
     },
 ]
+*/
 
 const Transaction = {
     // Atalho de todas as transações
-    all: transactions,
+    all: Storage.get(),
     add(transaction) {
         Transaction.all.push(transaction)
 
@@ -126,20 +137,6 @@ const Utils = {
     }
 }
 
-const App = {
-    init() {
-
-        // addTransaction é passada como um atalho
-        Transaction.all.forEach(DOM.addTransaction)
-        
-        DOM.updateBalance()
-    },
-    reload() {
-        DOM.clearTransactions()
-        App.init()
-    }
-}
-
 const Form = {
     description: document.querySelector('input#description'),
     amount: document.querySelector('input#amount'),
@@ -215,6 +212,21 @@ const Form = {
     }
 }
 
+const App = {
+    init() {
+        // addTransaction é passada como um atalho
+        Transaction.all.forEach(DOM.addTransaction)
+        
+        DOM.updateBalance()
+
+        Storage.set(Transaction.all)
+    },
+    reload() {
+        DOM.clearTransactions()
+        App.init()
+    }
+}
+
 App.init()
 
 // Transaction.add({
@@ -225,3 +237,4 @@ App.init()
 
 //Transaction.remove(3)
 
+// Storage.get()
