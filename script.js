@@ -111,6 +111,16 @@ const Utils = {
         })
 
         return signal + value
+    },
+    formatAmount(value) {
+        value = Number(value) * 100 
+        
+        return value
+    },
+    formatDate(date) {
+        const splittedDate = date.split("-")
+        // `` -> template literals
+        return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`  
     }
 }
 
@@ -142,9 +152,20 @@ const Form = {
         }
     },
 
-    formatData() {
+    formatValues() {
+        let { description, amount, date } = Form.getValues()
 
+        amount = Utils.formatAmount(amount)
+
+        date = Utils.formatDate(date)
+
+        return { 
+            description, 
+            amount, 
+            date
+        }
     },
+
     validateFields() {
         // Desestruturação
         const { description, amount, date } = Form.getValues()
@@ -153,12 +174,38 @@ const Form = {
             throw new Error("Por favor preencha todos os campos!!")
         }
     },
+
+    saveTransaction(transaction) {
+        Transaction.add(transaction)
+    },
+
+    clearFields() {
+        Form.description.value = ""
+        Form.amount.value = ""
+        Form.date.value = ""
+    },
+
     submit(event) {
         event.preventDefault()
 
         try {
+            // Verifica se os campos estão vazios
             Form.validateFields()
-            Form.formatData()
+
+            // Formata os valores dos campos para salvar
+            const transaction = Form.formatValues()
+
+            // Salva os valores
+            Form.saveTransaction(transaction)
+
+            // Limpa os campos depois de salvar
+            Form.clearFields()
+
+            // Fechar o modal
+            Modal.close()
+
+            // Atualizando a aplicação
+            App.reload()
         } catch (error) {
             // Modificar depois para modal
             alert(error.message)
