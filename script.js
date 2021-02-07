@@ -52,7 +52,7 @@ const Transaction = {
     incomes() {
         let income = 0
         Transaction.all.forEach((transaction) => {
-            if(transaction.amount > 0) {
+            if (transaction.amount > 0) {
                 income += transaction.amount
             }
         })
@@ -61,7 +61,7 @@ const Transaction = {
     expenses() {
         let expense = 0
         Transaction.all.forEach((transaction) => {
-            if(transaction.amount < 0) {
+            if (transaction.amount < 0) {
                 expense += transaction.amount
             }
         })
@@ -81,7 +81,7 @@ const DOM = {
         tr.dataset.index = index
 
         DOM.transactionsContainer.appendChild(tr)
-        
+
     },
     innerHTMLTransaction(transaction, index) {
         const CSSclass = transaction.amount > 0 ? "income" : "expense"
@@ -116,7 +116,7 @@ const Utils = {
 
         value = String(value).replace(/\D/g, "")
 
-        value = Number(value)/100
+        value = Number(value) / 100
 
         value = value.toLocaleString("pt-BR", {
             style: "currency",
@@ -126,14 +126,14 @@ const Utils = {
         return signal + value
     },
     formatAmount(value) {
-        value = Number(value) * 100 
-        
+        value = Number(value) * 100
+
         return Math.round(value)
     },
     formatDate(date) {
         const splittedDate = date.split("-")
         // `` -> template literals
-        return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`  
+        return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`
     }
 }
 
@@ -157,9 +157,9 @@ const Form = {
 
         date = Utils.formatDate(date)
 
-        return { 
-            description, 
-            amount, 
+        return {
+            description,
+            amount,
             date
         }
     },
@@ -168,7 +168,7 @@ const Form = {
         // Desestruturação
         const { description, amount, date } = Form.getValues()
 
-        if(description.trim() === "" || amount.trim() === "" || date.trim() === ""){
+        if (description.trim() === "" || amount.trim() === "" || date.trim() === "") {
             throw new Error("Por favor preencha todos os campos!!")
         }
     },
@@ -207,8 +207,32 @@ const Form = {
         } catch (error) {
             // Modificar depois para modal
             alert(error.message)
-        }        
-        
+            // let message = error.message
+            // if (message === "Por favor preencha todos os campos!!")
+            //     ModalAlert.openModal(message)
+
+        }
+
+    }
+}
+
+const ModalAlert = {
+    openModal(message) {
+        document.querySelector('.modal-message').classList.add('active')
+
+        const p = document.createElement('p')
+        p.innerHTML = message
+        document.getElementById('modal').appendChild(p)
+    },
+    closeModal() {
+        document.querySelector('.modal-message').classList.remove('active')
+
+        let nodes = document.getElementsByTagName("p");
+
+        for (let i = 0, len = nodes.length; i != len; ++i) {
+            nodes[0].parentNode.removeChild(nodes[0]);
+        }
+
     }
 }
 
@@ -216,7 +240,7 @@ const App = {
     init() {
         // addTransaction é passada como um atalho
         Transaction.all.forEach(DOM.addTransaction)
-        
+
         DOM.updateBalance()
 
         Storage.set(Transaction.all)
